@@ -17,7 +17,7 @@
 # under the License.
 #
 
-from TProtocol import *
+from .TProtocol import *
 from struct import pack, unpack
 
 
@@ -42,12 +42,13 @@ class TBinaryProtocol(TProtocolBase):
     self.strictWrite = strictWrite
 
   def writeMessageBegin(self, name, type, seqid):
+    byte_name = name.encode()
     if self.strictWrite:
       self.writeI32(TBinaryProtocol.VERSION_1 | type)
-      self.writeString(name)
+      self.writeString(byte_name)
       self.writeI32(seqid)
     else:
-      self.writeString(name)
+      self.writeString(byte_name)
       self.writeByte(type)
       self.writeI32(seqid)
 
@@ -118,9 +119,9 @@ class TBinaryProtocol(TProtocolBase):
     buff = pack("!d", dub)
     self.trans.write(buff)
 
-  def writeString(self, str):
-    self.writeI32(len(str))
-    self.trans.write(str)
+  def writeString(self, the_str):
+    self.writeI32(len(the_str))
+    self.trans.write(the_str)
 
   def readMessageBegin(self):
     sz = self.readI32()

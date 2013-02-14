@@ -17,7 +17,7 @@
 # under the License.
 #
 
-from TProtocol import TType, TProtocolBase, TProtocolException
+from .TProtocol import TType, TProtocolBase, TProtocolException
 import base64
 import json
 import math
@@ -57,7 +57,7 @@ CTYPES = {TType.BOOL:       'tf',
           TType.MAP:        'map'}
 
 JTYPES = {}
-for key in CTYPES.keys():
+for key in list(CTYPES.keys()):
   JTYPES[CTYPES[key]] = key
 
 

@@ -86,18 +86,18 @@ class TSSLSocket(TSocket.TSocket):
         self.handle.settimeout(self._timeout)
         try:
           self.handle.connect(ip_port)
-        except socket.error, e:
+        except socket.error as e:
           if res is not res0[-1]:
             continue
           else:
             raise e
         break
-    except socket.error, e:
+    except socket.error as e:
       if self._unix_socket:
         message = 'Could not connect to secure socket %s: %s' \
                 % (self._unix_socket, e)
       else:
-        message = 'Could not connect to %s:%d: %s' % (self.host, self.port, e)
+        message = 'Could not connect to %s:%d: %s' % (self.host, self.port, repr(e))
       raise TTransportException(type=TTransportException.NOT_OPEN,
                                 message=message)
     if self.validate:
@@ -189,7 +189,7 @@ class TSSLServerSocket(TSocket.TServerSocket):
     try:
       client = ssl.wrap_socket(plain_client, certfile=self.certfile,
                       server_side=True, ssl_version=self.SSL_VERSION)
-    except ssl.SSLError, ssl_exc:
+    except ssl.SSLError as ssl_exc:
       # failed handshake/ssl wrap, close socket to client
       plain_client.close()
       # raise ssl_exc
